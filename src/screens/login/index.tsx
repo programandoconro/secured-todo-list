@@ -1,4 +1,3 @@
-// LoginScreen.tsx
 import React, { JSX } from 'react';
 import { View, Button, StyleSheet } from 'react-native';
 

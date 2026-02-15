@@ -1,93 +1,127 @@
-import React from 'react';
-import renderer from 'react-test-renderer';
-import { act } from 'react-test-renderer'; // same import
+import { renderHook, act, waitFor } from '@testing-library/react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useTodos } from '../hooks';
+import { Keyboard } from 'react-native';
+import { useTodos } from '../hooks'; // Adjust path to your hook file
 
-// Mock AsyncStorage
-jest.mock('@react-native-async-storage/async-storage', () => ({
-  getItem: jest.fn(),
-  setItem: jest.fn(),
-}));
+// 1. Mocking Dependencies
+jest.mock('@react-native-async-storage/async-storage', () =>
+  require('@react-native-async-storage/async-storage/jest/async-storage-mock'),
+);
 
-// Mock useSafeAreaInsets
-jest.mock('react-native-safe-area-context', () => ({
-  useSafeAreaInsets: () => ({ top: 0, bottom: 0, left: 0, right: 0 }),
-  SafeAreaProvider: ({ children }: any) => children,
-}));
+jest.mock('react-native-safe-area-context', () => {
+  return {
+    useSafeAreaInsets: () => ({ top: 0, bottom: 0, left: 0, right: 0 }),
+  };
+});
 
-describe('useTodos hook', () => {
-  beforeEach(() => {
-    (AsyncStorage.getItem as jest.Mock).mockReset();
-    (AsyncStorage.setItem as jest.Mock).mockReset();
+describe('useTodos Hook', () => {
+  beforeEach(async () => {
+    jest.clearAllMocks();
+    await AsyncStorage.clear();
+    // Pre-set storage to empty string so JSON.parse doesn't error
+    (AsyncStorage.getItem as jest.Mock).mockResolvedValue('[]');
+    jest.spyOn(Keyboard, 'dismiss');
+    jest.spyOn(Date, 'now').mockReturnValue(12345); // Predictable IDs
   });
 
-  const renderHookInComponent = async () => {
-    const hookRef: { current?: ReturnType<typeof useTodos> } = {};
-
-    const TestComponent = ({ hookRef }: { hookRef: any }) => {
-      hookRef.current = useTodos();
-      return null;
-    };
-
-    await act(async () => {
-      renderer.create(<TestComponent hookRef={hookRef} />);
-      // wait for async useEffect in hook
-      await Promise.resolve();
-    });
-
-    return hookRef;
+  // Helper to ensure hook has finished its initial mounting effects
+  const setupHook = async () => {
+    const view = renderHook(() => useTodos());
+    // Wait for initial loadTodos effect to trigger
+    await waitFor(() => expect(AsyncStorage.getItem).toHaveBeenCalled());
+    return view;
   };
 
-  it('adds a new todo and clears input', async () => {
-    const hookRef = await renderHookInComponent();
-    const hook = hookRef.current!;
+  it('adds a todo correctly and clears input', async () => {
+    const { result } = await setupHook();
 
-    act(() => {
-      hook.setNewTodo('New Task');
-      hook.addTodo();
+    await act(async () => {
+      result.current.setNewTodo('Buy Milk');
     });
 
-    expect(hook.todos[0].text).toBe('New Task');
-    expect(hook.newTodo).toBe('');
+    await act(async () => {
+      result.current.addTodo();
+    });
+
+    // waitFor handles the batching update in React 19
+    await waitFor(() => {
+      expect(result.current.todos).toHaveLength(1);
+    });
+
+    expect(result.current.todos[0]).toEqual({
+      id: '12345',
+      text: 'Buy Milk',
+      done: false,
+    });
+    expect(result.current.newTodo).toBe('');
+    expect(Keyboard.dismiss).toHaveBeenCalled();
   });
 
-  it('toggles a todo', async () => {
-    const hookRef = await renderHookInComponent();
-    const hook = hookRef.current!;
+  it('toggles a todo done status', async () => {
+    const { result } = await setupHook();
 
-    act(() => {
-      hook.setNewTodo('Toggle Task');
-      hook.addTodo();
+    await act(async () => {
+      result.current.setNewTodo('Task');
     });
 
-    const id = hook.todos[0].id;
-
-    act(() => {
-      hook.toggleTodo(id);
+    await act(async () => {
+      result.current.addTodo();
     });
-    expect(hook.todos[0].done).toBe(true);
 
-    act(() => {
-      hook.toggleTodo(id);
+    await waitFor(() => expect(result.current.todos.length).toBe(1));
+
+    await waitFor(() => {
+      expect(result.current.todos[0].done).toBe(false);
     });
-    expect(hook.todos[0].done).toBe(false);
+
+    await act(async () => {
+      result.current.toggleTodo('12345');
+    });
+
+    await waitFor(() => {
+      expect(result.current.todos[0].done).toBe(true);
+    });
   });
 
   it('deletes a todo', async () => {
-    const hookRef = await renderHookInComponent();
-    const hook = hookRef.current!;
+    const { result } = await setupHook();
 
-    act(() => {
-      hook.setNewTodo('Delete Task');
-      hook.addTodo();
+    await act(async () => {
+      result.current.setNewTodo('Delete Task');
     });
 
-    const id = hook.todos[0].id;
-
-    act(() => {
-      hook.deleteTodo(id);
+    await act(async () => {
+      result.current.addTodo();
     });
-    expect(hook.todos.length).toBe(0);
+
+    await waitFor(() => expect(result.current.todos.length).toBe(1));
+
+    await act(async () => {
+      result.current.deleteTodo('12345');
+    });
+
+    await waitFor(() => {
+      expect(result.current.todos).toHaveLength(0);
+    });
+  });
+
+  it('persists changes to storage', async () => {
+    const { result } = await setupHook();
+
+    await act(async () => {
+      result.current.setNewTodo('Storage Test');
+    });
+
+    await act(async () => {
+      result.current.addTodo();
+    });
+
+    // Check if setItem was called with our data eventually
+    await waitFor(() => {
+      expect(AsyncStorage.setItem).toHaveBeenCalledWith(
+        '@todos_list',
+        expect.stringContaining('Storage Test'),
+      );
+    });
   });
 });
