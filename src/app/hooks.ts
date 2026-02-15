@@ -1,9 +1,9 @@
-import * as LocalAuthentication from 'expo-local-authentication';
 import { useState, useRef, useEffect } from 'react';
+import * as LocalAuthentication from 'expo-local-authentication';
 
 export const useApp = () => {
   const [isAuthenticated, setAuthenticated] = useState(false);
-  const hasRunAuth = useRef(false); // prevent double-run in StrictMode
+  const hasRunAuth = useRef(false);
 
   const handleAuthentication = async () => {
     const result = await LocalAuthentication.authenticateAsync({
@@ -16,6 +16,7 @@ export const useApp = () => {
     }
   };
   useEffect(() => {
+    // prevent double-run in StrictMode
     if (hasRunAuth.current) return;
     hasRunAuth.current = true;
 

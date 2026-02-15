@@ -9,18 +9,13 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
+
+import { TodoItem } from '../../components/todo-item';
 import { useTodos } from './hooks';
 
 export const Todos = (): JSX.Element => {
-  const {
-    insets,
-    todos,
-    toggleTodo,
-    deleteTodo,
-    addTodo,
-    newTodo,
-    setNewTodo,
-  } = useTodos();
+  const { insets, todos, onDelete, onToggle, addTodo, newTodo, setNewTodo } =
+    useTodos();
 
   return (
     <View
@@ -44,20 +39,7 @@ export const Todos = (): JSX.Element => {
           keyExtractor={item => item.id}
           style={styles.list}
           renderItem={({ item }) => (
-            <View style={styles.todoItem}>
-              <TouchableOpacity
-                onPress={() => toggleTodo(item.id)}
-                style={styles.circle}
-              >
-                {item.done && <View style={styles.filledCircle} />}
-              </TouchableOpacity>
-              <Text style={[styles.todoText, item.done && styles.done]}>
-                {item.text}
-              </Text>
-              <TouchableOpacity onPress={() => deleteTodo(item.id)}>
-                <Text style={styles.remove}>REMOVE</Text>
-              </TouchableOpacity>
-            </View>
+            <TodoItem todo={item} onDelete={onDelete} onToggle={onToggle} />
           )}
           ListEmptyComponent={<Text style={styles.empty}>No todos yet</Text>}
         />
@@ -87,34 +69,6 @@ const styles = StyleSheet.create({
     color: '#003366',
   },
   list: { flex: 1, marginBottom: 16 },
-  todoItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    borderRadius: 24,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    marginBottom: 12,
-  },
-  circle: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    borderWidth: 2,
-    borderColor: '#003366',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 12,
-  },
-  filledCircle: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
-    backgroundColor: '#003366',
-  },
-  todoText: { flex: 1, fontSize: 16, color: '#000' },
-  done: { textDecorationLine: 'line-through', color: '#888' },
-  remove: { color: '#003366', fontWeight: 'bold', marginLeft: 12 },
   empty: { textAlign: 'center', color: '#888', marginTop: 20 },
   inputContainer: {
     flexDirection: 'row',

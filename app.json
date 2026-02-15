@@ -1,4 +1,14 @@
 {
   "name": "SecuredTodoList",
-  "displayName": "SecuredTodoList"
+  "displayName": "SecuredTodoList",
+  "expo": {
+    "plugins": [
+      [
+        "expo-local-authentication",
+        {
+          "faceIDPermission": "Allow $(PRODUCT_NAME) to use Face ID."
+        }
+      ]
+    ]
+  }
 }

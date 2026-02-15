@@ -1,9 +1,7 @@
 import React, { JSX } from 'react';
 import { View, Button, StyleSheet } from 'react-native';
 
-type LoginScreenProps = {
-  onRetry: () => void;
-};
+import { LoginScreenProps } from '../../model';
 
 export const Login = ({ onRetry }: LoginScreenProps): JSX.Element => {
   return (

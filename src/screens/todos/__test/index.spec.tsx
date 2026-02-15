@@ -1,13 +1,13 @@
-import { renderHook, act, waitFor } from '@testing-library/react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Keyboard } from 'react-native';
-import { useTodos } from '../hooks'; // Adjust path to your hook file
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { renderHook, act, waitFor } from '@testing-library/react-native';
+
+import { useTodos } from '../hooks';
 
 // 1. Mocking Dependencies
 jest.mock('@react-native-async-storage/async-storage', () =>
   require('@react-native-async-storage/async-storage/jest/async-storage-mock'),
 );
-
 jest.mock('react-native-safe-area-context', () => {
   return {
     useSafeAreaInsets: () => ({ top: 0, bottom: 0, left: 0, right: 0 }),
@@ -75,7 +75,7 @@ describe('useTodos Hook', () => {
     });
 
     await act(async () => {
-      result.current.toggleTodo('12345');
+      result.current.onToggle('12345');
     });
 
     await waitFor(() => {
@@ -97,7 +97,7 @@ describe('useTodos Hook', () => {
     await waitFor(() => expect(result.current.todos.length).toBe(1));
 
     await act(async () => {
-      result.current.deleteTodo('12345');
+      result.current.onDelete('12345');
     });
 
     await waitFor(() => {

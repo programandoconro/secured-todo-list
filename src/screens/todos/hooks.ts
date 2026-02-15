@@ -1,20 +1,31 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Keyboard } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import { Todo, STORAGE_KEY } from '../../model';
 
 export const useTodos = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [newTodo, setNewTodo] = useState('');
   const insets = useSafeAreaInsets();
 
+  // 1. Track if initial load is complete
+  const isLoaded = useRef(false);
+
   useEffect(() => {
     const loadTodos = async () => {
       try {
         const stored = await AsyncStorage.getItem(STORAGE_KEY);
-        if (stored) setTodos(JSON.parse(stored));
+        if (stored) {
+          setTodos(JSON.parse(stored));
+        }
       } catch (e) {
         console.warn('Failed to load todos', e);
+      } finally {
+        // 2. Mark as loaded regardless of success/fail
+        isLoaded.current = true;
       }
     };
     loadTodos();
@@ -31,40 +42,37 @@ export const useTodos = () => {
     saveTodos();
   }, [todos]);
 
-  const addTodo = () => {
-    if (!newTodo.trim()) return;
+  const addTodo = useCallback(() => {
+    const cleanTodo = newTodo.trim();
+    if (!cleanTodo) return;
+
     const todo: Todo = {
       id: Date.now().toString(),
-      text: newTodo,
+      text: cleanTodo,
       done: false,
     };
-    setTodos([todo, ...todos]);
+
+    setTodos(prev => [todo, ...prev]);
     setNewTodo('');
     Keyboard.dismiss();
-  };
+  }, [newTodo]);
 
-  const toggleTodo = (id: string) => {
+  const onToggle = useCallback((id: string) => {
     setTodos(prev =>
       prev.map(t => (t.id === id ? { ...t, done: !t.done } : t)),
     );
-  };
+  }, []);
 
-  const deleteTodo = (id: string) => {
+  const onDelete = useCallback((id: string) => {
     setTodos(prev => prev.filter(t => t.id !== id));
-  };
+  }, []);
   return {
     insets,
     todos,
     addTodo,
-    deleteTodo,
-    toggleTodo,
+    onDelete,
+    onToggle,
     newTodo,
     setNewTodo,
   };
 };
-type Todo = {
-  id: string;
-  text: string;
-  done: boolean;
-};
-const STORAGE_KEY = '@todos_list';

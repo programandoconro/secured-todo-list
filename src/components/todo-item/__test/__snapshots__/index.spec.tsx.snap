@@ -1,0 +1,257 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Item Component renders correctly in completed state (done) 1`] = `
+<View
+  style={
+    {
+      "alignItems": "center",
+      "backgroundColor": "#fff",
+      "borderRadius": 24,
+      "flexDirection": "row",
+      "marginBottom": 12,
+      "paddingHorizontal": 16,
+      "paddingVertical": 12,
+    }
+  }
+>
+  <View
+    accessibilityRole="checkbox"
+    accessibilityState={
+      {
+        "busy": undefined,
+        "checked": true,
+        "disabled": undefined,
+        "expanded": undefined,
+        "selected": undefined,
+      }
+    }
+    accessibilityValue={
+      {
+        "max": undefined,
+        "min": undefined,
+        "now": undefined,
+        "text": undefined,
+      }
+    }
+    accessible={true}
+    collapsable={false}
+    focusable={true}
+    onClick={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      {
+        "alignItems": "center",
+        "borderColor": "#003366",
+        "borderRadius": 10,
+        "borderWidth": 2,
+        "height": 20,
+        "justifyContent": "center",
+        "marginRight": 12,
+        "opacity": 1,
+        "width": 20,
+      }
+    }
+  >
+    <View
+      style={
+        {
+          "backgroundColor": "#003366",
+          "borderRadius": 6,
+          "height": 12,
+          "width": 12,
+        }
+      }
+    />
+  </View>
+  <Text
+    style={
+      [
+        {
+          "color": "#000",
+          "flex": 1,
+          "fontSize": 16,
+        },
+        {
+          "color": "#888",
+          "textDecorationLine": "line-through",
+        },
+      ]
+    }
+  >
+    Test Todo
+  </Text>
+  <View
+    accessibilityLabel="Remove todo"
+    accessibilityState={
+      {
+        "busy": undefined,
+        "checked": undefined,
+        "disabled": undefined,
+        "expanded": undefined,
+        "selected": undefined,
+      }
+    }
+    accessibilityValue={
+      {
+        "max": undefined,
+        "min": undefined,
+        "now": undefined,
+        "text": undefined,
+      }
+    }
+    accessible={true}
+    collapsable={false}
+    focusable={true}
+    onClick={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      {
+        "opacity": 1,
+      }
+    }
+  >
+    <Text
+      style={
+        {
+          "color": "#003366",
+          "fontWeight": "bold",
+          "marginLeft": 12,
+        }
+      }
+    >
+      REMOVE
+    </Text>
+  </View>
+</View>
+`;
+
+exports[`Item Component renders correctly in default state (not done) 1`] = `
+<View
+  style={
+    {
+      "alignItems": "center",
+      "backgroundColor": "#fff",
+      "borderRadius": 24,
+      "flexDirection": "row",
+      "marginBottom": 12,
+      "paddingHorizontal": 16,
+      "paddingVertical": 12,
+    }
+  }
+>
+  <View
+    accessibilityRole="checkbox"
+    accessibilityState={
+      {
+        "busy": undefined,
+        "checked": false,
+        "disabled": undefined,
+        "expanded": undefined,
+        "selected": undefined,
+      }
+    }
+    accessibilityValue={
+      {
+        "max": undefined,
+        "min": undefined,
+        "now": undefined,
+        "text": undefined,
+      }
+    }
+    accessible={true}
+    collapsable={false}
+    focusable={true}
+    onClick={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      {
+        "alignItems": "center",
+        "borderColor": "#003366",
+        "borderRadius": 10,
+        "borderWidth": 2,
+        "height": 20,
+        "justifyContent": "center",
+        "marginRight": 12,
+        "opacity": 1,
+        "width": 20,
+      }
+    }
+  />
+  <Text
+    style={
+      [
+        {
+          "color": "#000",
+          "flex": 1,
+          "fontSize": 16,
+        },
+        false,
+      ]
+    }
+  >
+    Test Todo
+  </Text>
+  <View
+    accessibilityLabel="Remove todo"
+    accessibilityState={
+      {
+        "busy": undefined,
+        "checked": undefined,
+        "disabled": undefined,
+        "expanded": undefined,
+        "selected": undefined,
+      }
+    }
+    accessibilityValue={
+      {
+        "max": undefined,
+        "min": undefined,
+        "now": undefined,
+        "text": undefined,
+      }
+    }
+    accessible={true}
+    collapsable={false}
+    focusable={true}
+    onClick={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      {
+        "opacity": 1,
+      }
+    }
+  >
+    <Text
+      style={
+        {
+          "color": "#003366",
+          "fontWeight": "bold",
+          "marginLeft": 12,
+        }
+      }
+    >
+      REMOVE
+    </Text>
+  </View>
+</View>
+`;

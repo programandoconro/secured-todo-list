@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
-import { Login } from '..'; // Adjust path as needed
+
+import { Login } from '..';
 
 describe('Login Component', () => {
   it('renders the retry button correctly', () => {

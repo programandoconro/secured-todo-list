@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactTestRenderer from 'react-test-renderer';
+
 import { App } from '..';
-import { useApp } from '../hooks'; // Import this to typecast and control the mock
+import { useApp } from '../hooks';
 
 // 1. Mock the Hook with a dynamic response
 jest.mock('../hooks', () => ({
