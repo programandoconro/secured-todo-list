@@ -14,8 +14,17 @@ import { TodoItem } from '../../components/todo-item';
 import { useTodos } from './hooks';
 
 export const Todos = (): JSX.Element => {
-  const { insets, todos, onDelete, onToggle, addTodo, newTodo, setNewTodo } =
-    useTodos();
+  const {
+    insets,
+    todos,
+    onDelete,
+    onToggle,
+    addTodo,
+    newTodo,
+    setNewTodo,
+    editTodo,
+    inputMode,
+  } = useTodos();
 
   return (
     <View
@@ -39,7 +48,12 @@ export const Todos = (): JSX.Element => {
           keyExtractor={item => item.id}
           style={styles.list}
           renderItem={({ item }) => (
-            <TodoItem todo={item} onDelete={onDelete} onToggle={onToggle} />
+            <TodoItem
+              todo={item}
+              onDelete={onDelete}
+              onToggle={onToggle}
+              onEdit={editTodo}
+            />
           )}
           ListEmptyComponent={<Text style={styles.empty}>No todos yet</Text>}
         />
@@ -52,7 +66,9 @@ export const Todos = (): JSX.Element => {
             onChangeText={setNewTodo}
           />
           <TouchableOpacity style={styles.addButton} onPress={addTodo}>
-            <Text style={styles.addButtonText}>ADD</Text>
+            <Text style={styles.addButtonText}>
+              {inputMode === 'add' ? 'ADD' : 'EDIT'}
+            </Text>
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>

@@ -11,6 +11,7 @@ describe('Item Component', () => {
 
   const mockOnToggle = jest.fn();
   const mockOnDelete = jest.fn();
+  const mockOnEdit = jest.fn();
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -22,6 +23,7 @@ describe('Item Component', () => {
         todo={mockTodo}
         onToggle={mockOnToggle}
         onDelete={mockOnDelete}
+        onEdit={mockOnEdit}
       />,
     );
 
@@ -36,6 +38,7 @@ describe('Item Component', () => {
         todo={doneTodo}
         onToggle={mockOnToggle}
         onDelete={mockOnDelete}
+        onEdit={mockOnEdit}
       />,
     );
 
@@ -48,6 +51,7 @@ describe('Item Component', () => {
         todo={mockTodo}
         onToggle={mockOnToggle}
         onDelete={mockOnDelete}
+        onEdit={mockOnEdit}
       />,
     );
 
@@ -64,6 +68,7 @@ describe('Item Component', () => {
         todo={mockTodo}
         onToggle={mockOnToggle}
         onDelete={mockOnDelete}
+        onEdit={mockOnEdit}
       />,
     );
 

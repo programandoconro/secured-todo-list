@@ -4,10 +4,16 @@ import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { ItemType } from '../../model';
 
 export const TodoItem = memo(
-  ({ todo, onToggle, onDelete }: ItemType): JSX.Element => (
-    <View style={styles.todoItem}>
+  ({ todo, onToggle, onDelete, onEdit }: ItemType): JSX.Element => (
+    <TouchableOpacity
+      onPress={() => onEdit(todo.id)}
+      style={styles.todoItem}
+      activeOpacity={0.8}
+    >
       <TouchableOpacity
-        onPress={() => onToggle(todo.id)}
+        onPress={() => {
+          onToggle(todo.id);
+        }}
         style={styles.circle}
         accessibilityRole="checkbox"
         accessibilityState={{ checked: todo.done }}
@@ -20,12 +26,14 @@ export const TodoItem = memo(
       </Text>
 
       <TouchableOpacity
-        onPress={() => onDelete(todo.id)}
+        onPress={() => {
+          onDelete(todo.id);
+        }}
         accessibilityLabel="Remove todo"
       >
         <Text style={styles.remove}>REMOVE</Text>
       </TouchableOpacity>
-    </View>
+    </TouchableOpacity>
   ),
 );
 

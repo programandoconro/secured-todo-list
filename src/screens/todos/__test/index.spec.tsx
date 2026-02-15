@@ -1,4 +1,3 @@
-import { Keyboard } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { renderHook, act, waitFor } from '@testing-library/react-native';
 
@@ -20,7 +19,6 @@ describe('useTodos Hook', () => {
     await AsyncStorage.clear();
     // Pre-set storage to empty string so JSON.parse doesn't error
     (AsyncStorage.getItem as jest.Mock).mockResolvedValue('[]');
-    jest.spyOn(Keyboard, 'dismiss');
     jest.spyOn(Date, 'now').mockReturnValue(12345); // Predictable IDs
   });
 
@@ -54,7 +52,6 @@ describe('useTodos Hook', () => {
       done: false,
     });
     expect(result.current.newTodo).toBe('');
-    expect(Keyboard.dismiss).toHaveBeenCalled();
   });
 
   it('toggles a todo done status', async () => {

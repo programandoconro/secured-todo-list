@@ -2,6 +2,33 @@
 
 exports[`Item Component renders correctly in completed state (done) 1`] = `
 <View
+  accessibilityState={
+    {
+      "busy": undefined,
+      "checked": undefined,
+      "disabled": undefined,
+      "expanded": undefined,
+      "selected": undefined,
+    }
+  }
+  accessibilityValue={
+    {
+      "max": undefined,
+      "min": undefined,
+      "now": undefined,
+      "text": undefined,
+    }
+  }
+  accessible={true}
+  collapsable={false}
+  focusable={true}
+  onClick={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
   style={
     {
       "alignItems": "center",
@@ -9,6 +36,7 @@ exports[`Item Component renders correctly in completed state (done) 1`] = `
       "borderRadius": 24,
       "flexDirection": "row",
       "marginBottom": 12,
+      "opacity": 1,
       "paddingHorizontal": 16,
       "paddingVertical": 12,
     }
@@ -137,6 +165,33 @@ exports[`Item Component renders correctly in completed state (done) 1`] = `
 
 exports[`Item Component renders correctly in default state (not done) 1`] = `
 <View
+  accessibilityState={
+    {
+      "busy": undefined,
+      "checked": undefined,
+      "disabled": undefined,
+      "expanded": undefined,
+      "selected": undefined,
+    }
+  }
+  accessibilityValue={
+    {
+      "max": undefined,
+      "min": undefined,
+      "now": undefined,
+      "text": undefined,
+    }
+  }
+  accessible={true}
+  collapsable={false}
+  focusable={true}
+  onClick={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
   style={
     {
       "alignItems": "center",
@@ -144,6 +199,7 @@ exports[`Item Component renders correctly in default state (not done) 1`] = `
       "borderRadius": 24,
       "flexDirection": "row",
       "marginBottom": 12,
+      "opacity": 1,
       "paddingHorizontal": 16,
       "paddingVertical": 12,
     }

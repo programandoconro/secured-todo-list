@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Keyboard } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -9,11 +8,13 @@ import { Todo, STORAGE_KEY } from '../../model';
 export const useTodos = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [newTodo, setNewTodo] = useState('');
+  const [inputMode, setInputMode] = useState<'add' | 'edit'>('add');
+  const [editingId, setEditingId] = useState<string | null>(null);
   const insets = useSafeAreaInsets();
 
-  // 1. Track if initial load is complete
   const isLoaded = useRef(false);
 
+  // Load todos from storage
   useEffect(() => {
     const loadTodos = async () => {
       try {
@@ -24,13 +25,13 @@ export const useTodos = () => {
       } catch (e) {
         console.warn('Failed to load todos', e);
       } finally {
-        // 2. Mark as loaded regardless of success/fail
         isLoaded.current = true;
       }
     };
     loadTodos();
   }, []);
 
+  // Save todos whenever they change
   useEffect(() => {
     const saveTodos = async () => {
       try {
@@ -39,23 +40,30 @@ export const useTodos = () => {
         console.warn('Failed to save todos', e);
       }
     };
-    saveTodos();
+    if (isLoaded.current) saveTodos();
   }, [todos]);
 
   const addTodo = useCallback(() => {
     const cleanTodo = newTodo.trim();
     if (!cleanTodo) return;
 
-    const todo: Todo = {
-      id: Date.now().toString(),
-      text: cleanTodo,
-      done: false,
-    };
+    if (inputMode === 'edit' && editingId) {
+      setTodos(prev =>
+        prev.map(t => (t.id === editingId ? { ...t, text: cleanTodo } : t)),
+      );
+    } else {
+      const todo: Todo = {
+        id: Date.now().toString(),
+        text: cleanTodo,
+        done: false,
+      };
+      setTodos(prev => [todo, ...prev]);
+    }
 
-    setTodos(prev => [todo, ...prev]);
     setNewTodo('');
-    Keyboard.dismiss();
-  }, [newTodo]);
+    setInputMode('add');
+    setEditingId(null);
+  }, [newTodo, inputMode, editingId]);
 
   const onToggle = useCallback((id: string) => {
     setTodos(prev =>
@@ -63,9 +71,37 @@ export const useTodos = () => {
     );
   }, []);
 
-  const onDelete = useCallback((id: string) => {
-    setTodos(prev => prev.filter(t => t.id !== id));
+  const onDelete = useCallback(
+    (id: string) => {
+      setTodos(prev => prev.filter(t => t.id !== id));
+      // Reset edit mode if deleting the item being edited
+      if (id === editingId) {
+        setInputMode('add');
+        setEditingId(null);
+        setNewTodo('');
+      }
+    },
+    [editingId],
+  );
+
+  const editTodo = useCallback(
+    (id: string) => {
+      const todo = todos.find(t => t.id === id);
+      if (!todo) return;
+
+      setInputMode('edit');
+      setEditingId(id);
+      setNewTodo(todo.text);
+    },
+    [todos],
+  );
+
+  const resetInput = useCallback(() => {
+    setInputMode('add');
+    setEditingId(null);
+    setNewTodo('');
   }, []);
+
   return {
     insets,
     todos,
@@ -74,5 +110,8 @@ export const useTodos = () => {
     onToggle,
     newTodo,
     setNewTodo,
+    editTodo,
+    inputMode,
+    resetInput,
   };
 };
